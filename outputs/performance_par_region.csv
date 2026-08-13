@@ -1,0 +1,10 @@
+region_hotel,effectif,taux_annulation_reel,f1,precision,rappel
+Trentino-Alto_Adige,111,0.315,0.547,0.408,0.829
+Sicilia,88,0.364,0.545,0.429,0.75
+Lombardia,164,0.268,0.504,0.386,0.727
+Lazio,187,0.235,0.483,0.343,0.818
+Campania,131,0.252,0.473,0.338,0.788
+Puglia,73,0.219,0.462,0.333,0.75
+Veneto,161,0.242,0.439,0.321,0.692
+Liguria,99,0.283,0.416,0.327,0.571
+Toscana,130,0.223,0.34,0.246,0.552

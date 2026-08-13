@@ -1,0 +1,6 @@
+reservation_id,proba,delai_reservation_jours,type_acompte,tarif_remboursable,canal_reservation,segment_client,nuits,montant_total_eur,demandes_speciales,modifications_reservation
+R009204,0.04663935239475232,29,total,non,site_hotel,solo,3,452.19,2.0,0
+R001223,0.0497615654563192,41,total,non,entreprise,loisirs_couple,7,1276.19,0.0,0
+R009144,0.07699898818574574,20,total,non,entreprise,famille,5,1052.92,0.0,0
+R001185,0.07827939946640769,34,total,non,site_hotel,affaires,2,422.71,1.0,1
+R000145,0.07996149169008653,22,total,oui,site_hotel,loisirs_couple,7,1908.35,2.0,1

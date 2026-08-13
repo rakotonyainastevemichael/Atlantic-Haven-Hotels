@@ -1,0 +1,9 @@
+configuration,n_variables,f1,gain_vs_baseline,precision,rappel,roc_auc,seuil,gain_marginal
+A. Variables brutes (baseline),16,0.4691,0.0,0.3389,0.7616,0.6706,0.225,
+B. + indicateurs de manque,20,0.4686,-0.0004,0.3616,0.6656,0.6731,0.26,-0.0005
+C. + historique client,22,0.4696,0.0005,0.3431,0.7437,0.6758,0.23,0.001
+D. + composition du séjour,27,0.4691,0.0,0.3431,0.7413,0.6746,0.23,-0.0005
+E. + transformations temporelles,31,0.4693,0.0002,0.3391,0.7616,0.6742,0.225,0.0002
+F. + prix relatifs,33,0.4704,0.0014,0.3398,0.764,0.6742,0.225,0.0011
+G. + score d'engagement,36,0.4724,0.0034,0.3421,0.7632,0.6746,0.225,0.002
+H. + interactions explicites,42,0.4704,0.0014,0.3413,0.7567,0.675,0.225,-0.002
