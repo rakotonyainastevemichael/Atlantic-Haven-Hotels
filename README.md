@@ -125,7 +125,8 @@ Le fichier `rapport/script_video.pdf` contient le script minuté de la vidéo (6
 
 **🔗 Liens utiles :**
 
-- [**LIEN VERS LA VIDÉO DE PRÉSENTATION**](https://www.youtube.com/) — *(à remplacer par votre lien)*
+- [**LIEN VERS LA VIDÉO DE PRÉSENTATION**](14:55
+https://drive.google.com/file/d/1qPvkVd-BmKoUrcdXh0yR3tCKrfHe7NRX/view?usp=drivesdk) 
 - [Lien vers le dépôt GitHub](https://github.com/rakotonyainastevemichael/Atlantic-Haven-Hotels)
 - Sujet original : `ressources/` — données synthétiques ISPM
 
