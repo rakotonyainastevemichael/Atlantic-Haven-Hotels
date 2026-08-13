@@ -8,12 +8,17 @@ Réalisé au sein de **ISPM — Madagascar** ([www.ispm-edu.com](https://www.isp
 
 ## ⚡ Démarrage rapide
 
-Trois commandes, aucune configuration, aucun GPU. L'installation dépend du débit réseau ; le pipeline lui-même s'exécute en **moins d'une minute**.
+Aucune configuration, aucun GPU. L'installation dépend du débit réseau ; le pipeline lui-même s'exécute en **moins d'une minute**.
 
 ```bash
+# Installation
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python run_pipeline.py
+
+# Exécution
+python run_pipeline.py         # 53 s — tables, figures, submission.csv
+python ablation.py             # étude d'ablation
+jupyter notebook notebook.ipynb   # vue notebook, commentée pas à pas
 ```
 
 Le pipeline régénère **tous les chiffres, toutes les tables et toutes les figures de ce rapport**, ainsi que `submission.csv`. Il se termine par des vérifications automatiques de conformité du fichier de soumission ; s'il affiche `Toutes les vérifications de conformité sont passées.`, l'exécution est valide.
@@ -30,7 +35,7 @@ Le pipeline régénère **tous les chiffres, toutes les tables et toutes les fig
 - prénom(s) : Lantoniaina Rojotiana
 - classe : ISAIA 4 
 - numéro : 17
-- rôle : responsable de la modélisation et du pipeline
+- rôle : modélisation et pipeline — comparaison des familles de modèles, ensemble pondéré, choix du seuil, industrialisation du code (`src/models.py`, `run_pipeline.py`)
 
 #### Membre 2
 
@@ -38,7 +43,7 @@ Le pipeline régénère **tous les chiffres, toutes les tables et toutes les fig
 - prénom(s) : Stève Michaël
 - classe : IGGLIA 4A 
 - numéro : 26
-- rôle : analyste — EDA et analyse d'erreurs
+- rôle : exploration et évaluation — EDA, traitement des valeurs manquantes, métriques, analyse d'erreurs et équité par sous-groupes (`src/data.py`, `src/evaluation.py`)
 
 #### Membre 3
 
@@ -46,8 +51,9 @@ Le pipeline régénère **tous les chiffres, toutes les tables et toutes les fig
 - prénom(s) : Titosy Fitia
 - classe : IGGLIA 4A 
 - numéro : 30
-- rôle : présentateur — vidéo et recommandation métier
+- rôle : feature engineering et protocole de validation — construction des variables, références apprises sur le train, plis temporels à fenêtre étendue, étude d'ablation en huit configurations (`src/features.py`, `ablation.py`)
 
+> **Travail collectif.** La vidéo de présentation, les recommandations métier et la rédaction de ce rapport ont été réalisées **conjointement par les trois membres**. Les rôles ci-dessus indiquent la partie technique dont chacun a assuré la responsabilité principale ; toutes les décisions de modélisation ont été discutées et validées en groupe.
 
 ---
 
@@ -128,8 +134,9 @@ Le fichier `rapport/script_video.pdf` contient le script minuté de la vidéo (6
 ```bash
 python3 -m venv .venv && source .venv/bin/activate   # environnement isolé
 pip install -r requirements.txt
-python run_pipeline.py     # ~55 s : toutes les tables, figures et submission.csv
-python ablation.py         # ~40 s : étude d'ablation du feature engineering
+python run_pipeline.py            # ~55 s : toutes les tables, figures et submission.csv
+python ablation.py                # ~40 s : étude d'ablation du feature engineering
+jupyter notebook notebook.ipynb   # vue notebook : même démarche, commentée pas à pas
 ```
 
 Procédure complète, prérequis et dépannage en **[section 9](#9-installation-et-exécution)**.
