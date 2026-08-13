@@ -6,6 +6,22 @@ Réalisé au sein de **ISPM — Madagascar** ([www.ispm-edu.com](https://www.isp
 
 ---
 
+## ⚡ Démarrage rapide
+
+Trois commandes, aucune configuration, aucun GPU. L'installation dépend du débit réseau ; le pipeline lui-même s'exécute en **moins d'une minute**.
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python run_pipeline.py
+```
+
+Le pipeline régénère **tous les chiffres, toutes les tables et toutes les figures de ce rapport**, ainsi que `submission.csv`. Il se termine par des vérifications automatiques de conformité du fichier de soumission ; s'il affiche `Toutes les vérifications de conformité sont passées.`, l'exécution est valide.
+
+> Installation détaillée, prérequis et dépannage : **[section 9 — Installation et exécution](#9-installation-et-exécution)**.
+
+---
+
 ### **1. Informations sur le Groupe**
 
 #### Membre 1
@@ -84,7 +100,8 @@ classification binaire · validation temporelle à fenêtre étendue · F1-score
 ├── build_notebook.py               génère notebook.ipynb
 ├── build_script_video.py           génère rapport/script_video.pdf
 ├── submission.csv                  prédictions sur reservations_test.csv (2 000 lignes)
-├── requirements.txt                dépendances épinglées
+├── requirements.txt                dépendances (contraintes minimales)
+├── requirements-lock.txt           versions exactes de la dernière exécution vérifiée
 ├── src/
 │   ├── config.py                   chemins, graines, listes de colonnes, hyperparamètres
 │   ├── data.py                     chargement, nettoyage, plis temporels
@@ -103,16 +120,19 @@ Le fichier `rapport/script_video.pdf` contient le script minuté de la vidéo (6
 **🔗 Liens utiles :**
 
 - [**LIEN VERS LA VIDÉO DE PRÉSENTATION**](https://www.youtube.com/) — *(à remplacer par votre lien)*
-- [Lien vers le dépôt GitHub](https://github.com/AndryRAB/atlantic-haven.git)
+- [Lien vers le dépôt GitHub](https://github.com/rakotonyainastevemichael/Atlantic-Haven-Hotels)
 - Sujet original : `ressources/` — données synthétiques ISPM
 
 **Reproduction complète :**
 
 ```bash
+python3 -m venv .venv && source .venv/bin/activate   # environnement isolé
 pip install -r requirements.txt
-python run_pipeline.py     # ~45 s : toutes les tables, figures et submission.csv
+python run_pipeline.py     # ~55 s : toutes les tables, figures et submission.csv
 python ablation.py         # ~40 s : étude d'ablation du feature engineering
 ```
+
+Procédure complète, prérequis et dépannage en **[section 9](#9-installation-et-exécution)**.
 
 ---
 
@@ -382,18 +402,19 @@ En parallèle, engager la collecte des trois familles de données identifiées e
 
 ### **7. Reproductibilité**
 
-- **version de Python** : 3.12
-- **principales bibliothèques et versions** : voir `requirements.txt` — scikit-learn 1.8.0, pandas 3.0.2, numpy 2.4.4, lightgbm 4.7.0, matplotlib 3.10.8
+- **version de Python** : 3.10 minimum ; validé en **3.10.12** et **3.12**
+- **principales bibliothèques et versions** : contraintes minimales dans `requirements.txt`, versions exactes de la dernière exécution vérifiée dans `requirements-lock.txt` — numpy 2.2.6, pandas 2.3.3, scikit-learn 1.7.2, scipy 1.15.3, matplotlib 3.10.9, lightgbm 4.7.0
 - **graine(s) aléatoire(s)** : `SEED = 42`, fixée dans `src/config.py` et propagée à `random`, `numpy`, et à chaque estimateur (`random_state=SEED`)
 - **commande ou procédure d'exécution** :
   ```bash
+  python3 -m venv .venv && source .venv/bin/activate
   pip install -r requirements.txt
   python run_pipeline.py     # tables, figures et submission.csv
   python ablation.py         # étude d'ablation
   # ou : jupyter notebook notebook.ipynb   (exécution complète depuis un noyau vierge)
   ```
-- **durée approximative d'entraînement** : environ 45 s pour le pipeline complet (4 plis × 5 modèles + modèle final), 40 s pour l'ablation, sur un ordinateur portable standard. Aucun GPU requis.
-- **environnement utilisé** : local, Ubuntu, CPU uniquement
+- **durée approximative d'entraînement** : environ 55 s pour le pipeline complet (4 plis × 5 modèles + modèle final), 40 s pour l'ablation, sur un ordinateur portable standard (Intel Core i5, 8 Go RAM). Aucun GPU requis.
+- **environnement utilisé** : local, Ubuntu 22.04, CPU uniquement
 - **vérifications automatiques** : `run_pipeline.py` se termine par des assertions contrôlant que `submission.csv` contient bien 2 000 lignes, les trois colonnes exigées, l'ordre des identifiants du fichier de test, des probabilités dans [0, 1] et des décisions dans {0, 1}. Le script échoue si l'une de ces conditions n'est pas remplie.
 - **LightGBM optionnel** : si la bibliothèque n'est pas installée, `models.py` renormalise automatiquement les poids de l'ensemble sur les deux modèles restants. Le pipeline s'exécute sans erreur, avec un F1 très légèrement inférieur.
 
@@ -408,4 +429,119 @@ En parallèle, engager la collecte des trois familles de données identifiées e
 - **Référence 5** : Niculescu-Mizil, A., Caruana, R. (2005). *Predicting Good Probabilities With Supervised Learning*. ICML. — Justification du renoncement à `class_weight="balanced"` au profit du réglage du seuil, pour préserver la calibration.
 - **Référence 6** : Documentation officielle scikit-learn, sections *Cross-validation of time series data* et *Probability calibration*. — https://scikit-learn.org/stable/
 
-**Outils d'IA générative utilisés.** Un assistant conversationnel (Claude, Anthropic) a été employé comme support de développement : structuration du code en modules, rédaction des docstrings, relecture critique de la démarche méthodologique et mise en forme du rapport. **Toutes les décisions de modélisation, l'ensemble des résultats chiffrés et leur interprétation ont été produits par l'exécution effective du code de ce dépôt** — aucun chiffre de ce rapport n'est repris d'une source externe ou estimé : chacun est reproductible via `run_pipeline.py` et tracé dans `outputs/`.
+---
+
+### **9. Installation et Exécution**
+
+#### Prérequis
+
+| Élément | Version | Vérification |
+|---|---|---|
+| Python | ≥ 3.10 | `python3 --version` |
+| pip | ≥ 22 | `pip --version` |
+| Module `venv` | inclus | `python3 -m venv --help` |
+| Espace disque | ~700 Mo | dont ~670 Mo pour l'environnement virtuel |
+
+Aucun GPU, aucune base de données, aucune connexion réseau n'est nécessaire une fois les dépendances installées. Les données sont fournies dans `ressources/` et versionnées avec le dépôt.
+
+Si `venv` est absent sur Debian/Ubuntu : `sudo apt install python3-venv`.
+
+#### Installation pas à pas
+
+```bash
+# 1. Récupérer le projet
+git clone https://github.com/rakotonyainastevemichael/Atlantic-Haven-Hotels.git
+cd Atlantic-Haven-Hotels
+
+# 2. Créer et activer un environnement virtuel isolé
+python3 -m venv .venv
+source .venv/bin/activate            # Windows : .venv\Scripts\activate
+
+# 3. Installer les dépendances
+pip install --upgrade pip
+pip install -r requirements.txt      # ou requirements-lock.txt pour les versions exactes
+
+# 4. Vérifier l'installation
+python -c "import numpy, pandas, sklearn, matplotlib, lightgbm; print('Environnement prêt')"
+```
+
+L'invite du terminal doit afficher `(.venv)` une fois l'environnement activé. **Tant qu'il n'est pas activé, la commande `python` peut ne pas exister** sur les distributions Linux récentes — utiliser `python3`, ou activer l'environnement.
+
+#### Les trois manières d'exécuter le projet
+
+**a) Pipeline complet — la voie recommandée pour le jury**
+
+```bash
+python run_pipeline.py
+```
+
+Environ 55 secondes. Le script déroule les sept étapes du rapport et affiche chaque résultat au fur et à mesure : chargement et contrôles d'intégrité, EDA, construction des plis temporels, comparaison des cinq modèles, choix du seuil, analyse d'erreurs, modèle final et soumission.
+
+Il produit :
+
+| Sortie | Contenu |
+|---|---|
+| `submission.csv` | 2 000 prédictions sur `reservations_test.csv` |
+| `outputs/*.csv` | toutes les tables chiffrées citées dans ce rapport |
+| `figures/*.png` | figures de l'EDA et de l'évaluation |
+
+**b) Étude d'ablation du feature engineering**
+
+```bash
+python ablation.py
+```
+
+Environ 40 secondes. Reproduit le tableau des huit configurations de la question Q3 et écrit `outputs/ablation_feature_engineering.csv`.
+
+**c) Notebook commenté**
+
+```bash
+jupyter notebook notebook.ipynb
+```
+
+Puis *Kernel → Restart & Run All*. Même démarche que le pipeline, avec les commentaires d'analyse intercalés. Exécutable de bout en bout depuis un noyau vierge.
+
+#### Comment vérifier que l'exécution est correcte
+
+`run_pipeline.py` se termine par un bloc d'assertions qui contrôle la conformité de `submission.csv` : 2 000 lignes, les trois colonnes exigées, l'ordre des identifiants du fichier de test, des probabilités dans [0, 1] et des décisions dans {0, 1}. **Le script échoue bruyamment si l'une de ces conditions n'est pas remplie.**
+
+Une exécution valide se termine par :
+
+```
+submission.csv écrit : 2000 lignes, 3 colonnes
+taux d'alerte sur le test : 0.4900
+probabilité moyenne : 0.2449
+Toutes les vérifications de conformité sont passées.
+
+Durée totale : 53.3 s
+```
+
+Les résultats sont **déterministes** (`SEED = 42`) : les chiffres obtenus doivent correspondre exactement à ceux des sections 4 et 5 de ce rapport. Trois repères pour un contrôle rapide :
+
+| Repère | Valeur attendue |
+|---|---:|
+| F1 hors-échantillon du modèle final | 0,4744 |
+| Seuil retenu | 0,240 |
+| Coefficient de `score_engagement` | −0,4756 |
+
+#### Dépannage
+
+| Symptôme | Cause | Solution |
+|---|---|---|
+| `error: externally-managed-environment` | installation hors environnement virtuel | créer et activer le `.venv` (étape 2) |
+| `python : commande introuvable` | environnement non activé | `source .venv/bin/activate`, ou utiliser `python3` |
+| `ModuleNotFoundError: No module named 'src'` | mauvais répertoire courant | exécuter depuis la racine du projet |
+| `FileNotFoundError` sur `ressources/…` | données absentes | vérifier que `ressources/` contient les quatre CSV du sujet |
+| LightGBM ne s'installe pas | binaire indisponible sur la plateforme | **ignorable** : `models.py` renormalise automatiquement les poids de l'ensemble sur les deux modèles restants ; le pipeline s'exécute sans erreur, avec un F1 très légèrement inférieur |
+| Chiffres différents de ceux du rapport | versions de bibliothèques divergentes | `pip install -r requirements-lock.txt` |
+
+#### Structure des dépendances
+
+- **`requirements.txt`** — contraintes minimales, lisibles, pour une installation souple.
+- **`requirements-lock.txt`** — sortie de `pip freeze` de la dernière exécution vérifiée, pour une reproduction à l'identique.
+
+---
+
+### **Annexe — Outils d'IA générative utilisés**
+
+Un assistant conversationnel (Claude, Anthropic) a été employé comme support de développement : structuration du code en modules, rédaction des docstrings, relecture critique de la démarche méthodologique et mise en forme du rapport. **Toutes les décisions de modélisation, l'ensemble des résultats chiffrés et leur interprétation ont été produits par l'exécution effective du code de ce dépôt** — aucun chiffre de ce rapport n'est repris d'une source externe ou estimé : chacun est reproductible via `run_pipeline.py` et tracé dans `outputs/`.
